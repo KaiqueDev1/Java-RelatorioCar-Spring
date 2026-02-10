@@ -3,6 +3,10 @@ package com.example.relatoriocar.services;
 import com.example.relatoriocar.entity.Car;
 import com.example.relatoriocar.exception.ResourceNotFoundException;
 import com.example.relatoriocar.repository.CarRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +26,18 @@ public class CarService {
     public List<Car> listar(){
         return repository.findAll();
     }
+
+
+    public Page<Car> listarPaginado(int page, int size, String sortBy, String direction){
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return repository.findAll(pageable);
+
+    }
+
 
     public Car buscarPorId(Long id) throws ResourceNotFoundException {
         return repository.findById(id)

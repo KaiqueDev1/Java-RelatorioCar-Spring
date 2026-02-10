@@ -4,6 +4,7 @@ package com.example.relatoriocar.controller;
 import com.example.relatoriocar.entity.Car;
 import com.example.relatoriocar.exception.ResourceNotFoundException;
 import com.example.relatoriocar.services.CarService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,16 @@ public class CarController {
     @GetMapping
     public List<Car> listar() {
         return service.listar();
+    }
+
+    @GetMapping("/paginado")
+    public Page<Car> listarPaginado(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        return service.listarPaginado(page, size, sortBy, direction);
     }
 
     @GetMapping("/{id}")
